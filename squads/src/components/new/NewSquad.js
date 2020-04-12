@@ -22,12 +22,12 @@ export default function NewSquad() {
   //STEPS CONTROLLERS
   const next = () => {
     const val = current + 1;
-    setCurrent(val);
+    if(val < 3) setCurrent(val);
   };
 
   const prev = () => {
     let val = current - 1;
-    setCurrent(val);
+    if(val > -1) setCurrent(val);
   };
 
   const validateStep = () => {
@@ -75,7 +75,15 @@ export default function NewSquad() {
     setDetails(values);
     next();
   }
-
+  const lastStep = (balance) => {
+    console.log("COMPLETED REGISTER")
+    console.log(balance)
+    if(parseInt(balance) > 0){
+      message.success("Deploying your HELP DAO Squad!")
+    }else{
+      message.error("You need to add some balance to deploy the DAO")
+    }
+  }
   const steps = [
     {
       title: "Register",
@@ -87,7 +95,7 @@ export default function NewSquad() {
     },
     {
       title: "Launch",
-      content: <LaunchSquad></LaunchSquad>
+      content: <LaunchSquad parentCallback={(balance) => lastStep(balance)} name={details.name}></LaunchSquad>
     },
   ];
 
@@ -108,6 +116,9 @@ export default function NewSquad() {
           {steps[current].content}
         </Row>
       </div>
+      <Button onClick={() => next()}>NEXT</Button>
+      <Button onClick={() => prev()}>PREV</Button>
+      <h6>REMEMBER TO REMOVE THESE BUTTONS WHEN GO LIVE</h6>
     </>
   );
 }
